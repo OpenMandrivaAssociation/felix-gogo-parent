@@ -1,11 +1,14 @@
+%{?_javapackages_macros:%_javapackages_macros}
 %global project   felix-gogo
 %global pkgname   parent
 
-Name:             %{project}-%{pkgname}
+%{!?scl:%global pkg_name %{name}}
+%{?scl:%scl_package %{project}-%{pkgname}}
+
+Name:             %{?scl_prefix}%{project}-%{pkgname}
 Version:          0.6.0
-Release:          1
+Release:          8.0%{?dist}
 Summary:          Parent package for Felix Gogo
-Group:            Development/Java
 License:          ASL 2.0
 URL:              http://felix.apache.org/site/apache-felix-gogo.html
 
@@ -13,13 +16,14 @@ Source0:          http://apache.mirror.rbftpnetworks.com//felix/gogo-parent-0.6.
 
 BuildArch:        noarch
 
-BuildRequires:    java
-BuildRequires:    maven
-BuildRequires:    jpackage-utils
+BuildRequires:  maven-local
+BuildRequires:  mvn(junit:junit)
+BuildRequires:  mvn(org.apache.felix:felix-parent)
+BuildRequires:  mvn(org.apache.maven.plugins:maven-compiler-plugin)
+BuildRequires:  mvn(org.easymock:easymock)
+BuildRequires:  mvn(org.mockito:mockito-all)
 
-Requires:         java 
-BuildRequires:    maven
-Requires:         jpackage-utils
+%{?scl:Requires: %scl_runtime}
 
 %description
 Apache Felix is a community effort to implement the OSGi R4 Service Platform
@@ -34,17 +38,40 @@ dynamic service deployment framework that is amenable to remote management.
 %setup -q -n gogo-parent-%{version}
 
 %build
-mvn-rpmbuild install
+%mvn_build
 
 %install
-# pom
-install -d -m 755 %{buildroot}%{_mavenpomdir}
-install -pm 644 pom.xml %{buildroot}%{_mavenpomdir}/JPP-%{name}.pom
-%add_maven_depmap JPP-%{name}.pom 
+%mvn_install
 
-
-%files
+%files -f .mfiles
 %doc LICENSE NOTICE
-%{_mavenpomdir}/JPP-%{name}.pom
-%{_mavendepmapfragdir}/%{name}
 
+%changelog
+* Tue Aug 06 2013 Michal Srb <msrb@redhat.com> - 0.6.0-8
+- Adapt to current guidelines
+
+* Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6.0-7
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
+
+* Fri Mar 15 2013 Krzysztof Daniel <kdaniel@redhat.com> 0.6.0-6
+- Initial SCLization.
+
+* Wed Feb 13 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6.0-5
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
+* Wed Feb 06 2013 Java SIG <java-devel@lists.fedoraproject.org> - 0.6.0-4
+- Update for https://fedoraproject.org/wiki/Fedora_19_Maven_Rebuild
+- Replace maven BuildRequires with maven-local
+
+* Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6.0-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
+
+* Fri Jan 13 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6.0-2
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
+
+* Mon Nov 07 2011 Tomas Radej <tradej@redhat.com> - 0.6.0-2
+- Added install section to verify dependencies
+- Added (build)requires to maven
+
+* Wed Nov 02 2011 Tomas Radej <tradej@redhat.com> - 0.6.0-1
+- Initial Packaging
