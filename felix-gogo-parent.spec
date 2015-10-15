@@ -7,7 +7,7 @@
 
 Name:             %{?scl_prefix}%{project}-%{pkgname}
 Version:          0.6.0
-Release:          8.0%{?dist}
+Release:          8.1
 Summary:          Parent package for Felix Gogo
 License:          ASL 2.0
 URL:              http://felix.apache.org/site/apache-felix-gogo.html
@@ -18,7 +18,7 @@ BuildArch:        noarch
 
 BuildRequires:  maven-local
 BuildRequires:  mvn(junit:junit)
-BuildRequires:  mvn(org.apache.felix:felix-parent)
+BuildRequires:  mvn(org.apache.felix:felix-parent:pom:)
 BuildRequires:  mvn(org.apache.maven.plugins:maven-compiler-plugin)
 BuildRequires:  mvn(org.easymock:easymock)
 BuildRequires:  mvn(org.mockito:mockito-all)
