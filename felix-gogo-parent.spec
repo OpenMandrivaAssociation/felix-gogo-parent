@@ -7,7 +7,7 @@
 
 Name:             %{?scl_prefix}%{project}-%{pkgname}
 Version:          0.6.0
-Release:          8.1
+Release:          8.2
 Summary:          Parent package for Felix Gogo
 License:          ASL 2.0
 URL:              http://felix.apache.org/site/apache-felix-gogo.html
