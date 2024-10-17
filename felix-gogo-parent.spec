@@ -10,7 +10,7 @@ Version:          0.6.0
 Release:          8.3
 Summary:          Parent package for Felix Gogo
 License:          ASL 2.0
-URL:              http://felix.apache.org/site/apache-felix-gogo.html
+URL:              https://felix.apache.org/site/apache-felix-gogo.html
 
 Source0:          http://apache.mirror.rbftpnetworks.com//felix/gogo-parent-0.6.0-project.tar.gz
 
