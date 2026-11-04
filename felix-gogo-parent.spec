@@ -1,4 +1,3 @@
-%{?_javapackages_macros:%_javapackages_macros}
 %global project   felix-gogo
 %global pkgname   parent
 
@@ -6,22 +5,18 @@
 %{?scl:%scl_package %{project}-%{pkgname}}
 
 Name:             %{?scl_prefix}%{project}-%{pkgname}
-Version:          0.6.0
-Release:          8.3
+Version:          7
+Release:          1
 Summary:          Parent package for Felix Gogo
 License:          ASL 2.0
 URL:              https://felix.apache.org/site/apache-felix-gogo.html
 
-Source0:          http://apache.mirror.rbftpnetworks.com//felix/gogo-parent-0.6.0-project.tar.gz
+Source0:          https://repo1.maven.org/maven2/org/apache/felix/gogo-parent/%{version}/gogo-parent-%{version}.pom
+Source1:          https://www.apache.org/licenses/LICENSE-2.0.txt
 
 BuildArch:        noarch
-
-BuildRequires:  maven-local
-BuildRequires:  mvn(junit:junit)
-BuildRequires:  mvn(org.apache.felix:felix-parent:pom:)
-BuildRequires:  mvn(org.apache.maven.plugins:maven-compiler-plugin)
-BuildRequires:  mvn(org.easymock:easymock)
-BuildRequires:  mvn(org.mockito:mockito-all)
+BuildSystem:	maven
+BuildOption:	validate
 
 %{?scl:Requires: %scl_runtime}
 
@@ -35,43 +30,10 @@ OSGi technology combines aspects of these aforementioned principles to define a
 dynamic service deployment framework that is amenable to remote management.
 
 %prep
-%setup -q -n gogo-parent-%{version}
-
-%build
-%mvn_build
-
-%install
-%mvn_install
+cp -p %{SOURCE0} pom.xml
+cp -p %{SOURCE1} LICENSE
+# Shipped as a reactor module. A sibling relativePath does not exist here.
+sed -i '/<relativePath>/d' pom.xml
 
 %files -f .mfiles
-%doc LICENSE NOTICE
-
-%changelog
-* Tue Aug 06 2013 Michal Srb <msrb@redhat.com> - 0.6.0-8
-- Adapt to current guidelines
-
-* Sat Aug 03 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6.0-7
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_20_Mass_Rebuild
-
-* Fri Mar 15 2013 Krzysztof Daniel <kdaniel@redhat.com> 0.6.0-6
-- Initial SCLization.
-
-* Wed Feb 13 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6.0-5
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
-
-* Wed Feb 06 2013 Java SIG <java-devel@lists.fedoraproject.org> - 0.6.0-4
-- Update for https://fedoraproject.org/wiki/Fedora_19_Maven_Rebuild
-- Replace maven BuildRequires with maven-local
-
-* Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6.0-3
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
-
-* Fri Jan 13 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.6.0-2
-- Rebuilt for https://fedoraproject.org/wiki/Fedora_17_Mass_Rebuild
-
-* Mon Nov 07 2011 Tomas Radej <tradej@redhat.com> - 0.6.0-2
-- Added install section to verify dependencies
-- Added (build)requires to maven
-
-* Wed Nov 02 2011 Tomas Radej <tradej@redhat.com> - 0.6.0-1
-- Initial Packaging
+%doc LICENSE
