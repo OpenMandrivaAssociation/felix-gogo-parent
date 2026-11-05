@@ -8,6 +8,7 @@ Name:             %{?scl_prefix}%{project}-%{pkgname}
 Version:          7
 Release:          1
 Summary:          Parent package for Felix Gogo
+Group:            Development/Java
 License:          ASL 2.0
 URL:              https://felix.apache.org/site/apache-felix-gogo.html
 
@@ -35,8 +36,12 @@ dynamic service deployment framework that is amenable to remote management.
 %prep
 cp -p %{SOURCE0} pom.xml
 cp -p %{SOURCE1} LICENSE
-# Shipped as a reactor module. A sibling relativePath does not exist here.
-sed -i '/<relativePath>/d' pom.xml
+# felix-parent 8 is not packaged. The groupId lived there. The bundle
+# plugin is marked as an extension, so Maven would resolve it while
+# reading the POM. Version 6.0.0 is not packaged.
+sed -i '/<parent>/,/<\/parent>/d' pom.xml
+sed -i 's|<modelVersion>4.0.0</modelVersion>|<modelVersion>4.0.0</modelVersion>\n    <groupId>org.apache.felix</groupId>|' pom.xml
+sed -i '/<extensions>true<\/extensions>/d' pom.xml
 
 %files -f .mfiles
 %doc LICENSE
